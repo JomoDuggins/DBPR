@@ -9,73 +9,87 @@ using System.IO;
 
 namespace Mod
 {
-   public class Mod
-   {
 
-        public static Sprite RFEye = ModAPI.LoadSprite("RFlashHeadThing.png");
-        public static Sprite DBEye = ModAPI.LoadSprite("DabiHead.png");
-        public static Sprite BobEye = ModAPI.LoadSprite("BobHead.png");
-        public static Sprite BandiEye = ModAPI.LoadSprite("BandiHead.png");
-        public static Sprite MushyEye = ModAPI.LoadSprite("MushyHead.png");
+    //custom color
+  public class CustomColor : MonoBehaviour
+  {
+    [Header("Custom Lightning Color")]
+    [Tooltip("The color used by SpeedForceGiver or other color-driven scripts.")]
+    public Color color = Color.red;
 
-        public static Sprite SEye = ModAPI.LoadSprite("SavitarHead.png");
-        public static Sprite SU = ModAPI.LoadSprite("SavitarSkinU.png");
-        public static Sprite SM = ModAPI.LoadSprite("SavitarSkinM.png");
-        public static Sprite SL = ModAPI.LoadSprite("SavitarSkinL.png");
-
-        public static Sprite Null = ModAPI.LoadSprite("nothing");
-
-      public static AudioClip VibratingLoop = ModAPI.LoadSound("VibrationLoop.wav");
-
-      public static int SpeedForceCount = 0;
-      public static float TimeScaleMultiplier = 1f;
-
-      public static string ModTag = "<color=#FF6200>[REDUX FLASH MOD] <color=white>";
-      public static string SecretTag = "<color=#FFD500>[REDUX Secret] <color=white>";
-
-      public static void Main()
-      {
-         CategoryBuilder.Create("THE FLASH MOD REDUX", "THE FLASH MOD REDUX", ModAPI.LoadSprite("Cthumb.png"));
-
-    ModAPI.Register(
-    new Modification()
+    // Optional: preview the color in the object's renderer (if it has one)
+    void Start()
     {
+      var renderer = GetComponent<SpriteRenderer>();
+      if (renderer != null)
+      {
+        renderer.color = color;
+      }
+    }
+  }
+
+  public class Mod
+  {
+
+    public static Sprite RFEye = ModAPI.LoadSprite("RFlashHeadThing.png");
+    public static Sprite DBEye = ModAPI.LoadSprite("DabiHead.png");
+    public static Sprite BobEye = ModAPI.LoadSprite("BobHead.png");
+    public static Sprite BandiEye = ModAPI.LoadSprite("BandiHead.png");
+    public static Sprite MushyEye = ModAPI.LoadSprite("MushyHead.png");
+
+    public static Sprite SEye = ModAPI.LoadSprite("SavitarHead.png");
+    public static Sprite SU = ModAPI.LoadSprite("SavitarSkinU.png");
+    public static Sprite SM = ModAPI.LoadSprite("SavitarSkinM.png");
+    public static Sprite SL = ModAPI.LoadSprite("SavitarSkinL.png");
+
+    public static Sprite Null = ModAPI.LoadSprite("nothing");
+
+    public static AudioClip VibratingLoop = ModAPI.LoadSound("VibrationLoop.wav");
+
+    public static int SpeedForceCount = 0;
+    public static float TimeScaleMultiplier = 1f;
+
+    public static string ModTag = "<color=#FF6200>[REDUX FLASH MOD] <color=white>";
+    public static string SecretTag = "<color=#FFD500>[REDUX Secret] <color=white>";
+
+    public static void Main()
+    {
+      CategoryBuilder.Create("THE FLASH MOD REDUX", "THE FLASH MOD REDUX", ModAPI.LoadSprite("Cthumb.png"));
+
+      ModAPI.Register(new Modification() {
         OriginalItem = ModAPI.FindSpawnable("Rod"),
         NameOverride = ModTag + "Speed Force Giver (REDUX)",
         NameToOrderByOverride = "!01",
         DescriptionOverride = "Adds the Speed Force to any entity, making them able to use Flash's Powers",
         CategoryOverride = ModAPI.FindCategory("THE FLASH MOD REDUX"),
         ThumbnailOverride = ModAPI.LoadSprite("SpeedForceGiverThumb.png"),
-        AfterSpawn = (Instance) =>
-        {
-            Instance.gameObject.GetComponent<SpriteRenderer>().sprite = ModAPI.LoadSprite("SpeedForceGiver.png");
-            Instance.gameObject.FixColliders();
-            Instance.gameObject.AddComponent<SpeedForceGiver>();
+        AfterSpawn = (Instance) => {
+          Instance.gameObject.GetComponent<SpriteRenderer>().sprite = ModAPI.LoadSprite("SpeedForceGiver.png");
+          Instance.gameObject.FixColliders();
+          Instance.gameObject.AddComponent<SpeedForceGiver>();
 
-            // Speed Customization Button
-            Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
-                new ContextMenuButton("CustomizeSpeed", "Customize Speed", "Customize Speed", () =>
-                {
-                    DialogBoxManager.Dialog("<b>Maximum Slowmotion Chooser</b>",
-                        new DialogButton("<b><size=50%>20%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 5f),
-                        new DialogButton("<b><size=50%>10%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 10f),
-                        new DialogButton("<b><size=50%>5%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 20f),
-                        new DialogButton("<b><size=50%>2%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 50f),
-                        new DialogButton("<b><size=50%>1%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 100f),
-                        new DialogButton("<b><size=50%>0.5%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 200f),
-                        new DialogButton("<b><size=50%>0.2%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 500f),
-                        new DialogButton("<b><size=50%>0.1%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 1000f),
-                        new DialogButton("<b><size=50%>0.01%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 10000f),
-                        new DialogButton("<b><size=50%>0.001%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 100000f)
-                    );
-                })
-            );
+          // Speed Customization Button
+          Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+            new ContextMenuButton("CustomizeSpeed", "Customize Speed", "Customize Speed", () => {
+              DialogBoxManager.Dialog("<b>Maximum Slowmotion Chooser</b>",
+                new DialogButton("<b><size=50%>20%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 5f),
+                new DialogButton("<b><size=50%>10%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 10f),
+                new DialogButton("<b><size=50%>5%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 20f),
+                new DialogButton("<b><size=50%>2%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 50f),
+                new DialogButton("<b><size=50%>1%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 100f),
+                new DialogButton("<b><size=50%>0.5%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 200f),
+                new DialogButton("<b><size=50%>0.2%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 500f),
+                new DialogButton("<b><size=50%>0.1%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 1000f),
+                new DialogButton("<b><size=50%>0.01%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 10000f),
+                new DialogButton("<b><size=50%>0.001%</size></b>", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().MaxSpeedLevel = 100000f)
+              );
+            })
+          );
 
-            // Color Customization Button
-            Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
-        new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () =>
-        {
-            DialogBoxManager.Dialog("<b>Customize Lightning Color</b>",
+          // Color Customization Button
+          Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+            new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () => {
+              DialogBoxManager.Dialog("<b>Customize Lightning Color</b>",
                 new DialogButton("Red", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 0f, 0f)),
                 new DialogButton("Orange", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 0.65f, 0f)),
                 new DialogButton("Yellow", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 1f, 0f)),
@@ -86,183 +100,177 @@ namespace Mod
                 new DialogButton("White", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 1f, 1f)),
                 new DialogButton("Black", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0f, 0f, 0f)),
                 new DialogButton("Gray", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0.5f, 0.5f, 0.5f))
-            );
-        })
-    );
-   //custom color
-   public class CustomColor : MonoBehaviour
-   {
-    [Header("Custom Lightning Color")]
-    [Tooltip("The color used by SpeedForceGiver or other color-driven scripts.")]
-    public Color color = Color.red;
+              );
+            })
+          );
 
-    // Optional: preview the color in the object's renderer (if it has one)
-    void Start()
-    {
-        var renderer = GetComponent<SpriteRenderer>();
-        if (renderer != null)
-        {
-            renderer.color = color;
         }
-    }
-}
+      });
 
-         ModAPI.Register(
-            new Modification()
-            {
-                OriginalItem = ModAPI.FindSpawnable("Human"),
-                NameOverride = ModTag + " Flash (REDUX)",
-                NameToOrderByOverride = "01",
-                DescriptionOverride = "The Fastest man alive!\\nPress F on his Head to activate Slowmotion\\nOpen the Conext Menu on the Head for Slowmotion options",
-                CategoryOverride = ModAPI.FindCategory("THE FLASH MOD REDUX"),
-                ThumbnailOverride = ModAPI.LoadSprite("FlashThumb.png"),
-                AfterSpawn = (Instance) =>
-                {
-                    var skin = ModAPI.LoadTexture("FlashSkin.png");
-                    var flesh = ModAPI.LoadTexture("flesh layer.png");
-                    var bone = ModAPI.LoadTexture("bone layer.png");
-                    var person = Instance.GetComponent<PersonBehaviour>();
+      ModAPI.Register(
+        new Modification() {
+          OriginalItem = ModAPI.FindSpawnable("Human"),
+          NameOverride = ModTag + " Flash (REDUX)",
+          NameToOrderByOverride = "01",
+          DescriptionOverride = "The Fastest man alive!\\nPress F on his Head to activate Slowmotion\\nOpen the Conext Menu on the Head for Slowmotion options",
+          CategoryOverride = ModAPI.FindCategory("THE FLASH MOD REDUX"),
+          ThumbnailOverride = ModAPI.LoadSprite("FlashThumb.png"),
+          AfterSpawn = (Instance) => {
+            var skin = ModAPI.LoadTexture("FlashSkin.png");
+            var flesh = ModAPI.LoadTexture("flesh layer.png");
+            var bone = ModAPI.LoadTexture("bone layer.png");
+            var person = Instance.GetComponent<PersonBehaviour>();
+            var head = Instance.transform.Find("Head");
 
-                    var head = Instance.transform.Find("Head");
-                    head.gameObject.AddComponent<SlowTimeBehaviour>().MaxSpeedLevel = 1000000f;
+            head.gameObject.AddComponent<SlowTimeBehaviour>().MaxSpeedLevel = 1000000f;
+            Instance.GetComponent<PersonBehaviour>().SetBodyTextures(skin, flesh, bone);
+            person.SetBodyTextures(skin, flesh, bone, 1);
 
-                    Instance.GetComponent<PersonBehaviour>().SetBodyTextures(skin, flesh, bone);
-                    person.SetBodyTextures(skin, flesh, bone, 1);
+            foreach (LimbBehaviour limb in person.Limbs) {
+              if (limb.name == "Head") {
+                // Optional extra head logic
+              }
+            }
 
-                    foreach (LimbBehaviour limb in person.Limbs)
-                    {
-                        if (limb.name == "Head")
-                        {
-                            // Optional extra head logic
-                        }
-                    }
+            foreach (var body in person.Limbs) {
+              body.BaseStrength *= 1.2f;
+              body.Health *= 500f;
+              body.InitialHealth *= 500f;
+              body.BreakingThreshold *= 500f;
+              body.SkinMaterialHandler.intensityMultiplier = 0.2f;
+            }
+          }
+        });
 
-                    foreach (var body in person.Limbs)
-                    {
-                        body.BaseStrength *= 1.2f;
-                        body.Health *= 500f;
-                        body.InitialHealth *= 500f;
-                        body.BreakingThreshold *= 500f;
-                        body.SkinMaterialHandler.intensityMultiplier = 0.2f;
-                    }
-                 }});
-                
-//Reverse Flash
-ModAPI.Register(
-   new Modification()
-   {
-      OriginalItem = ModAPI.FindSpawnable("Human"), //item to derive from
-      NameOverride = ModTag + "Reverse Flash (REDUX)", //new item name with a suffix to assure it is globally unique
-      NameToOrderByOverride = "02",
-      DescriptionOverride = "Flash Biggest Rival!!\nPress F on his Head to activate Slowmotion\nOpen the Conext Menu on the Head for Slowmotion options", //new item description
-      CategoryOverride = ModAPI.FindCategory("THE FLASH MOD REDUX"), //new item category
-      ThumbnailOverride = ModAPI.LoadSprite("RFlashThumb.png"), //new item thumbnail (relative path)
-      AfterSpawn = (Instance) => //all code in the AfterSpawn delegate will be executed when the item is spawned
-      {       
+      //Reverse Flash
+      ModAPI.Register(
+        new Modification() {
+          OriginalItem = ModAPI.FindSpawnable("Human"), //item to derive from
+          NameOverride = ModTag + "Reverse Flash (REDUX)", //new item name with a suffix to assure it is globally unique
+          NameToOrderByOverride = "02",
+          DescriptionOverride = "Flash Biggest Rival!!\nPress F on his Head to activate Slowmotion\nOpen the Conext Menu on the Head for Slowmotion options", //new item description
+          CategoryOverride = ModAPI.FindCategory("THE FLASH MOD REDUX"), //new item category
+          ThumbnailOverride = ModAPI.LoadSprite("RFlashThumb.png"), //new item thumbnail (relative path)
+          AfterSpawn = (Instance) => //all code in the AfterSpawn delegate will be executed when the item is spawned
+          {       
+            AudioSource spawn = Instance.AddComponent<AudioSource>();
+            spawn.minDistance = 1;
+            spawn.maxDistance = 1;
+            spawn.volume = 1;
+            AudioClip spawnclip = ModAPI.LoadSound("Activate.mp3");
+            spawn.clip = spawnclip;     
 
-AudioSource spawn = Instance.AddComponent<AudioSource>();
-spawn.minDistance = 1;
-spawn.maxDistance = 1;
-spawn.volume = 1;
-AudioClip spawnclip = ModAPI.LoadSound("Activate.mp3");
-spawn.clip = spawnclip;     
-
-         var skin = ModAPI.LoadTexture("RFlashSkin.png");
-         var flesh = ModAPI.LoadTexture("flesh layer.png");
-         var bone = ModAPI.LoadTexture("bone layer.png");
-         var person = Instance.GetComponent<PersonBehaviour>();
-
-         var head = Instance.transform.Find("Head");
+            var skin = ModAPI.LoadTexture("RFlashSkin.png");
+            var flesh = ModAPI.LoadTexture("flesh layer.png");
+            var bone = ModAPI.LoadTexture("bone layer.png");
+            var person = Instance.GetComponent<PersonBehaviour>();
+            var head = Instance.transform.Find("Head");
 
             var rfeyeObject = new GameObject("redeye");
             rfeyeObject.transform.SetParent(head);
             rfeyeObject.transform.localPosition = new Vector3(0f, 0f);
             rfeyeObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             rfeyeObject.transform.localScale = new Vector3(1f, 1f);
+
             var rfeyeSprite = rfeyeObject.AddComponent<SpriteRenderer>();
             rfeyeSprite.sprite = Mod.Null;
             rfeyeSprite.sortingLayerName = "Bubbles"; 
             rfeyeSprite.GetComponent<SpriteRenderer>().sharedMaterial = ModAPI.FindMaterial("VeryBright");
 
-         head.gameObject.AddComponent<SlowTimeBehaviour>().MaxSpeedLevel = 10000f;
-         head.gameObject.GetComponent<SlowTimeBehaviour>().color = new Color(1f, 0f, 0f);
-         
-         Instance.GetComponent<PersonBehaviour>().SetBodyTextures(skin, flesh, bone);
-         person.SetBodyTextures(skin, flesh, bone, 1);
+            head.gameObject.AddComponent<SlowTimeBehaviour>().MaxSpeedLevel = 10000f;
+            head.gameObject.GetComponent<SlowTimeBehaviour>().color = new Color(1f, 0f, 0f);
+            
+            Instance.GetComponent<PersonBehaviour>().SetBodyTextures(skin, flesh, bone);
+            person.SetBodyTextures(skin, flesh, bone, 1);
 
-         foreach(LimbBehaviour limb in person.Limbs)
-         {
-            if (limb.name == "Head")
-            {
-               GameObject HeadThing = new GameObject("HeadThing");
-               HeadThing.transform.SetParent(limb.gameObject.transform);
-               HeadThing.transform.localPosition = new Vector3(0f, 0f);
-               HeadThing.transform.rotation = limb.gameObject.transform.rotation;
-               HeadThing.transform.localScale = new Vector3(1f, 1f);
-               HeadThing.AddComponent<SpriteRenderer>();
-               SpriteRenderer spriteRenderer = HeadThing.GetComponent<SpriteRenderer>();
-               spriteRenderer.sprite = ModAPI.LoadSprite("RFlashHeadThing.png");
-               spriteRenderer.sortingLayerName = "Foreground";
-               spriteRenderer.sortingOrder += 1;
-               spriteRenderer.GetComponent<SpriteRenderer>().sharedMaterial = ModAPI.FindMaterial("VeryBright");
+            foreach(LimbBehaviour limb in person.Limbs) {
+              if (limb.name == "Head") {
+                GameObject HeadThing = new GameObject("HeadThing");
+                HeadThing.transform.SetParent(limb.gameObject.transform);
+                HeadThing.transform.localPosition = new Vector3(0f, 0f);
+                HeadThing.transform.rotation = limb.gameObject.transform.rotation;
+                HeadThing.transform.localScale = new Vector3(1f, 1f);
+                HeadThing.AddComponent<SpriteRenderer>();
 
-head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(new ContextMenuButton("<color=#FF6200>--Negative Speedforce Eye--", "<color=#FF6200>--Negative Speedforce Eye--", "<color=#FF6200>--Negative Speedforce Eye--", new UnityAction[1]
-{
-    (UnityAction) (() =>
-    {
+                SpriteRenderer spriteRenderer = HeadThing.GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = ModAPI.LoadSprite("RFlashHeadThing.png");
+                spriteRenderer.sortingLayerName = "Foreground";
+                spriteRenderer.sortingOrder += 1;
+                spriteRenderer.GetComponent<SpriteRenderer>().sharedMaterial = ModAPI.FindMaterial("VeryBright");
 
-    })
-}));
+                head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+                  new ContextMenuButton(
+                    "<color=#FF6200>--Negative Speedforce Eye--", 
+                    "<color=#FF6200>--Negative Speedforce Eye--", 
+                    "<color=#FF6200>--Negative Speedforce Eye--",
+                    new UnityAction[1] {
+                      (UnityAction) (() => {})
+                    }
+                  )
+                );
+                head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+                  new ContextMenuButton(
+                    "<color=white>On", 
+                    "<color=white>On", 
+                    "<color=white>On",
+                    new UnityAction[1] {
+                      (UnityAction) (() => {
+                        spriteRenderer.sprite = Mod.RFEye;
+                        spawn.Play(); 
 
-head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(new ContextMenuButton("<color=white>On", "<color=white>On", "<color=white>On", new UnityAction[1]
-{
-    (UnityAction) (() =>
-    {
-            spriteRenderer.sprite = Mod.RFEye;
-spawn.Play(); 
-                var impact = ModAPI.CreateParticleEffect("Vapor", head.transform.position);
-                var particle = impact.GetComponent<ParticleSystem>();
+                        var impact = ModAPI.CreateParticleEffect("Vapor", head.transform.position);
+                        var particle = impact.GetComponent<ParticleSystem>();
+                        var mainModule = particle.main;
+                        mainModule.startSize = 1f;   
+                      })
+                    }
+                  )
+                );
 
-                var mainModule = particle.main;
-                mainModule.startSize = 1f;   
-    })
-}));
 
-head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(new ContextMenuButton("<color=white>Off", "<color=white>Off", "<color=white>Off", new UnityAction[1]
-{
-    (UnityAction) (() =>
-    {
-            spriteRenderer.sprite = Mod.Null;
-spawn.Play();    
-                var impact = ModAPI.CreateParticleEffect("Vapor", head.transform.position);
-                var particle = impact.GetComponent<ParticleSystem>();
+                head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+                  new ContextMenuButton(
+                    "<color=white>Off",
+                    "<color=white>Off",
+                    "<color=white>Off",
+                    new UnityAction[1] {
+                      (UnityAction) (() => {
+                        spriteRenderer.sprite = Mod.Null;
+                        spawn.Play();    
+                        var impact = ModAPI.CreateParticleEffect("Vapor", head.transform.position);
+                        var particle = impact.GetComponent<ParticleSystem>();
 
-                var mainModule = particle.main;
-                mainModule.startSize = 1f;  
-    })
-}));
+                        var mainModule = particle.main;
+                        mainModule.startSize = 1f;  
+                      })
+                    }
+                  )
+                );
 
-head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(new ContextMenuButton("<color=#FF6200>----", "<color=#FF6200>----", "<color=#FF6200>----", new UnityAction[1]
-{
-    (UnityAction) (() =>
-    {
-
-    })
-}));
-               }
+              }
             }
 
-         foreach (var body in person.Limbs)
-         {
-            body.BaseStrength *= 1.2f;
-            body.Health *= 500f;
-            body.InitialHealth *= 500f;
-            body.BreakingThreshold *= 500f;
-            body.SkinMaterialHandler.intensityMultiplier = 0.2f;
+            head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
+              new ContextMenuButton(
+                "<color=#FF6200>----",
+                "<color=#FF6200>----",
+                "<color=#FF6200>----",
+                new UnityAction[1] {
+                  (UnityAction) (() => { })
+                }
+              )
+            );
+
+            foreach (var body in person.Limbs) {
+              body.BaseStrength *= 1.2f;
+              body.Health *= 500f;
+              body.InitialHealth *= 500f;
+              body.BreakingThreshold *= 500f;
+              body.SkinMaterialHandler.intensityMultiplier = 0.2f;
             }
-         }
-      }
-   ); 
+          }
+        }
+      ); 
 
 //Zoom
 ModAPI.Register(
