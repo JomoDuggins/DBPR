@@ -107,18 +107,24 @@ namespace Mod
           // Color Customization Button
           Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
             new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () => {
-              var buttons = new List<DialogButton>();
               string[] prettyColors = {
-                "Red",
-                "Orange",
+                  "Red",
+                  "Orange",
+                  "Yellow",
+                  "Green",
+                  "Blue",
+                  "Purple",
+                  "White",
+                  "Black",
+                  "Pink"
               };
-              foreach (var colorName in prettyColors) {
-                buttons.Add(new DialogButton(colorName, true, () => Mod.setCustomColor(Instance.gameObject, Mod.getColor(colorName))));
-              }
-              DialogBoxManager.Dialog("<b>Customize Lightning Color</b>",
-                buttons[0],
-                buttons[1]
-              );
+
+              var buttons = prettyColors.Select(color => {
+                  string label = "<b><size=\"20%\">" + color + "</size></b>";
+                  return new DialogButton(label, true, () => Mod.setCustomColor(Instance.gameObject, Mod.getColor(color)));
+              }).ToArray();
+
+              DialogBoxManager.Dialog("<b>Customize Lighting Color</b>", buttons);
             })
           );
 
