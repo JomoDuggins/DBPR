@@ -110,12 +110,14 @@ namespace Mod
               var buttons = new List<DialogButton>();
               string[] prettyColors = {
                 "Red",
+                "Orange",
               };
               foreach (var colorName in prettyColors) {
                 buttons.Add(new DialogButton(colorName, true, () => Mod.setCustomColor(Instance.gameObject, Mod.getColor(colorName))));
               }
               DialogBoxManager.Dialog("<b>Customize Lightning Color</b>",
-                buttons[0]
+                buttons[0],
+                buttons[1]
               );
             })
           );
