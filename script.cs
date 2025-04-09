@@ -18,13 +18,23 @@ namespace Mod
     public Color color = Color.red;
 
     // Optional: preview the color in the object's renderer (if it has one)
-    void Start()
-    {
+    void Start() {
       var renderer = GetComponent<SpriteRenderer>();
-      if (renderer != null)
-      {
+      if (renderer != null) {
         renderer.color = color;
       }
+    }
+  }
+
+  public static class ColorExtensions
+  {
+    /// <summary>
+    /// Convert string to Color (if defined as a static property of Color)
+    /// </summary>
+    /// <param name="color"></param>
+    /// <returns></returns>
+    public static Color ToColor(this string color) {
+        return (Color)typeof(Color).GetProperty(color.ToLowerInvariant()).GetValue(null, null);
     }
   }
 
@@ -51,6 +61,14 @@ namespace Mod
 
     public static string ModTag = "<color=#FF6200>[REDUX FLASH MOD] <color=white>";
     public static string SecretTag = "<color=#FFD500>[REDUX Secret] <color=white>";
+
+    public static UnityEngine.Color getColor(string name) {
+      return name.ToColor();
+    }
+
+    public static void setCustomColor(GameObject gameObject, Color color) {
+      gameObject.GetComponent<SpeedForceGiver>().CustomColor = color;
+    }
 
     public static void Main()
     {
@@ -89,17 +107,15 @@ namespace Mod
           // Color Customization Button
           Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
             new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () => {
+              var buttons = new List<DialogButton>();
+              string[] prettyColors = {
+                "Red",
+              };
+              foreach (var colorName in prettyColors) {
+                buttons.Add(new DialogButton(colorName, true, () => Mod.setCustomColor(Instance.gameObject, Mod.getColor(colorName))));
+              }
               DialogBoxManager.Dialog("<b>Customize Lightning Color</b>",
-                new DialogButton("Red", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 0f, 0f)),
-                new DialogButton("Orange", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 0.65f, 0f)),
-                new DialogButton("Yellow", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 1f, 0f)),
-                new DialogButton("Green", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0f, 1f, 0f)),
-                new DialogButton("Blue", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0f, 0f, 1f)),
-                new DialogButton("Purple", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0.5f, 0f, 0.5f)),
-                new DialogButton("Pink", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 0.41f, 0.71f)),
-                new DialogButton("White", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(1f, 1f, 1f)),
-                new DialogButton("Black", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0f, 0f, 0f)),
-                new DialogButton("Gray", true, () => Instance.gameObject.GetComponent<SpeedForceGiver>().CustomColor = new Color(0.5f, 0.5f, 0.5f))
+                buttons[0]
               );
             })
           );
@@ -1394,8 +1410,8 @@ head.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add
 //
 //
       }
-   public class SpeedForceGiver : MonoBehaviour
-{
+  
+   public class SpeedForceGiver : MonoBehaviour {
     public float MaxSpeedLevel = 1000000f;
 
     // This is the public color property that other scripts can access/set
