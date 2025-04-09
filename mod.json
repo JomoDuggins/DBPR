@@ -1,0 +1,21 @@
+{
+  "Name": "THE FLASH MOD REDUX",
+  "Author": "Original Author:MC studios Redux Author: Mobrack20",
+  "Description": "The Fastest Man alive!\n This mod is a redux of MC's Flash mod, I have permission to upload this...",
+  "ModVersion": "\n1.0",
+  "GameVersion": "\n1.27+",
+  "ThumbnailPath": "Cthumb.png",
+  "EntryPoint": "Mod.Mod",
+  "Tags": [
+    "Fun",
+    "Realistic",
+    "Utility"
+  ],
+  "Scripts": [
+    "script.cs",
+    "CategoryBuilder.cs"
+  ],
+  "Active": true,
+  "UGCIdentity": "3152516600",
+  "CreatorUGCIdentity": "3152516600"
+}
