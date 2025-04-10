@@ -62,6 +62,7 @@ namespace Mod
     public static readonly Color cyan = new Color(0f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
     public static readonly Color lightcyan = new Color(224f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
     public static readonly Color darkturquoise = new Color(0f / 255f, 206f / 255f, 209f / 255f, 255f / 255f);
+    public static readonly Color actualblue = new Color(0.247f, 0.467f, 1f);
     public static readonly Color turquoise = new Color(64f / 255f, 224f / 255f, 208f / 255f, 255f / 255f);
     public static readonly Color mediumturquoise = new Color(72f / 255f, 209f / 255f, 204f / 255f, 255f / 255f);
     public static readonly Color paleturquoise = new Color(175f / 255f, 238f / 255f, 238f / 255f, 255f / 255f);

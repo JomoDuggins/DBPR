@@ -125,15 +125,16 @@ namespace Mod
             {
               DialogBoxManager.Dialog("<b>Customize Lighting Color</b>",
                 Mod.MakeColorButton("Red", Instance.gameObject),
-                Mod.MakeColorButton("Orange", Instance.gameObject),
-                Mod.MakeColorButton("Yellow", Instance.gameObject),
+                Mod.MakeColorButton("DarkOrange", Instance.gameObject),
+                Mod.MakeColorButton("GoldenRod", Instance.gameObject),
                 Mod.MakeColorButton("Green", Instance.gameObject),
-                Mod.MakeColorButton("Blue", Instance.gameObject),
+                Mod.MakeColorButton("Actualblue", Instance.gameObject),
                 Mod.MakeColorButton("Purple", Instance.gameObject),
                 Mod.MakeColorButton("White", Instance.gameObject),
-                Mod.MakeColorButton("Black", Instance.gameObject),
-                Mod.MakeColorButton("Pink", Instance.gameObject),
-                Mod.MakeColorButton("Salmon", Instance.gameObject)
+                Mod.MakeColorButton("DarkSlateGray", Instance.gameObject),
+                Mod.MakeColorButton("HotPink", Instance.gameObject),
+                Mod.MakeColorButton("midnightblue", Instance.gameObject),
+                Mod.MakeColorButton("Crimson", Instance.gameObject)
               );
             })
           );
@@ -2249,7 +2250,6 @@ spawn.Play();
           SlowTimeThing.gameObject.GetComponent<SlowBehaviour>().Blow = true;
           SlowTimeThing.transform.localScale = new Vector3(6000f, 6000f);
         }
-
         else
         {
           Blow = false;
@@ -2290,13 +2290,11 @@ spawn.Play();
               {
                 body.gameObject.GetComponent<TrailRenderer>().time = 0.1f * (TimeScaleMultiplier / 2f);
               }
-
               else
               {
                 body.gameObject.GetComponent<TrailRenderer>().time = 1f;
               }
             }
-
             else
             {
               if (body.gameObject.GetComponent<TrailRenderer>().startColor != new Color(0f, 0f, 0f, 0f))
@@ -2307,7 +2305,6 @@ spawn.Play();
             }
           }
         }
-
         else
         {
           foreach (var body in transform.root.GetComponent<PersonBehaviour>().Limbs)
@@ -2363,8 +2360,8 @@ spawn.Play();
           body.gameObject.GetComponent<TrailRenderer>().startWidth = 0.12f;
           body.gameObject.GetComponent<TrailRenderer>().endWidth = 0f;
           body.gameObject.GetComponent<TrailRenderer>().time = 0.1f;
-          body.gameObject.GetComponent<TrailRenderer>().startColor = new Color(color.r, color.g, color.b, 0.025f);
-          body.gameObject.GetComponent<TrailRenderer>().endColor = new Color(color.r, color.g, color.b, 0f);
+          body.gameObject.GetComponent<TrailRenderer>().startColor = new Color(color.r, color.g, color.b, 0.5f);
+          body.gameObject.GetComponent<TrailRenderer>().endColor = new Color(color.r, color.g, color.b, 0.01f);
           body.gameObject.GetComponent<TrailRenderer>().material = ModAPI.FindMaterial("VeryBright");
           body.gameObject.GetComponent<TrailRenderer>().sortingLayerName = "Bottom";
 
