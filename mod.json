@@ -13,7 +13,8 @@
   ],
   "Scripts": [
     "script.cs",
-    "CategoryBuilder.cs"
+    "CategoryBuilder.cs",
+    "Colors.cs"
   ],
   "Active": true,
   "UGCIdentity": "3152516600",

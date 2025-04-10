@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using System.IO;
+using System.Reflection;
 
 namespace Mod
 {
@@ -31,13 +32,21 @@ namespace Mod
   public static class ColorExtensions
   {
     /// <summary>
-    /// Convert string to Color (if defined as a static property of Color)
+    /// Convert string to Color (if defined as a static readonly field of Colors)
     /// </summary>
-    /// <param name="color"></param>
-    /// <returns></returns>
-    public static Color ToColor(this string color)
+    /// <param name="colorName">The name of the color</param>
+    /// <returns>The corresponding Color, or Color.white if not found</returns>
+    public static Color ToColor(this string colorName)
     {
-      return (Color)typeof(Color).GetProperty(color.ToLowerInvariant()).GetValue(null, null);
+      var field = typeof(Colors).GetField(colorName.ToLower(), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+
+      if (field != null && field.FieldType == typeof(Color))
+      {
+        return (Color)field.GetValue(null);
+      }
+
+      Debug.LogWarning($"Color '{colorName}' not found. Returning Color.white as fallback.");
+      return Color.white; // fallback color
     }
   }
 
@@ -65,14 +74,12 @@ namespace Mod
     public static string ModTag = "<color=#FF6200>[REDUX FLASH MOD] <color=white>";
     public static string SecretTag = "<color=#FFD500>[REDUX Secret] <color=white>";
 
-    public static UnityEngine.Color getColor(string name)
+    public static DialogButton MakeColorButton(string colorName, GameObject gameObject)
     {
-      return name.ToColor();
-    }
-
-    public static void setCustomColor(GameObject gameObject, Color color)
-    {
-      gameObject.GetComponent<SpeedForceGiver>().CustomColor = color;
+      return new DialogButton("<b><size=\"20%\">" + colorName + "</size></b>", true, () =>
+      {
+        gameObject.GetComponent<SpeedForceGiver>().CustomColor = colorName.ToColor();
+      });
     }
 
     public static void Main()
@@ -114,29 +121,22 @@ namespace Mod
 
           // Color Customization Button
           Instance.gameObject.GetComponent<PhysicalBehaviour>().ContextMenuOptions.Buttons.Add(
-                new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () =>
-                {
-                  string[] prettyColors = {
-                  "Red",
-                  "Orange",
-                  "Yellow",
-                  "Green",
-                  "Blue",
-                  "Purple",
-                  "White",
-                  "Black",
-                  "Pink"
-               };
-
-                  var buttons = prettyColors.Select(color =>
-                      {
-                        string label = "<b><size=\"20%\">" + color + "</size></b>";
-                        return new DialogButton(label, true, () => Mod.setCustomColor(Instance.gameObject, Mod.getColor(color)));
-                      }).ToArray();
-
-                  DialogBoxManager.Dialog("<b>Customize Lighting Color</b>", buttons);
-                })
+            new ContextMenuButton("CustomizeColor", "Customize Color", "Customize Color", () =>
+            {
+              DialogBoxManager.Dialog("<b>Customize Lighting Color</b>",
+                Mod.MakeColorButton("Red", Instance.gameObject),
+                Mod.MakeColorButton("Orange", Instance.gameObject),
+                Mod.MakeColorButton("Yellow", Instance.gameObject),
+                Mod.MakeColorButton("Green", Instance.gameObject),
+                Mod.MakeColorButton("Blue", Instance.gameObject),
+                Mod.MakeColorButton("Purple", Instance.gameObject),
+                Mod.MakeColorButton("White", Instance.gameObject),
+                Mod.MakeColorButton("Black", Instance.gameObject),
+                Mod.MakeColorButton("Pink", Instance.gameObject),
+                Mod.MakeColorButton("Salmon", Instance.gameObject)
               );
+            })
+          );
 
         }
       });
